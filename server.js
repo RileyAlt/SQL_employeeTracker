@@ -66,7 +66,7 @@ const userQuestions = () => {
 
 //view all departments
 const viewAllDepartments = () => {
-    const sql = `SELECT department.id AS id, department_name AS department FROM department`;
+    const sql = `SELECT departments.id AS id, department_name AS departments FROM departments`;
     connection.promise().query(sql , (error, response ) => {
         if (error) throw error;
         userQuestions();
@@ -75,7 +75,7 @@ const viewAllDepartments = () => {
 
 //view all roles
 const viewAllRoles = () => {
-    const sql = `SELECT roles.title, roles.id, department.department_name AS department, roles.salary`;
+    const sql = `SELECT roles.title, roles.id, departments.department_name AS departments, roles.salary`;
     connection.promise().query(sql , (error, response ) => {
         if (error) throw error;
         userQuestions();
