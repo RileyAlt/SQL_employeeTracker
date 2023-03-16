@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
     dialect: 'mysql',
     port: 3306,
     user: 'root',
-    password: process.env.SQLPASSWORD,
+    password: process.env.DB_PASSWORD,
     database: 'company_db'
 });
 
