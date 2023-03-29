@@ -194,7 +194,7 @@ const updateEmployeeRole = () => {
         },
     ])
     .then((answer) => {
-        const sql = `UPDATE employees SET roles_id WHERE VALUES(?)`;
+        const sql = `UPDATE employees SET role_id = '' WHERE VALUES(?)`;
         connection.query(sql, [answer.updateEmployeeRoleId], (error, response) => {
           if (error) throw error;
           console.table(response);
