@@ -77,7 +77,15 @@ const viewAllDepartments = () => {
 
 //view all roles
 const viewAllRoles = () => {
-    const sql = `SELECT id, title, salary, departments_id FROM roles`;
+    const sql = `
+        SELECT 
+            r.id, 
+            r.title, 
+            d.name departments,
+            r.salary
+        FROM roles r
+        JOIN departments d
+        ON r.departments_id = d.id`;
     connection.query(sql , (error, response ) => {
         if (error) throw error;
         console.table(response);
@@ -87,7 +95,22 @@ const viewAllRoles = () => {
 
 //view all employees
 const viewAllEmployees = () => {
-    const sql = `SELECT id, first_name, last_name, roles_id, manager_id FROM employees`;
+    const sql = `
+        SELECT 
+            e.id,
+            e.first_name,
+            e.last_name,
+            r.title,
+            d.name departments,
+            r.salary, 
+            CONCAT(e2.first_name, " ", e2.last_name) manager
+        FROM employees e 
+        JOIN roles r
+        ON e.roles_id = r.id
+        JOIN departments d 
+        ON r.departments_id = d.id
+        LEFT JOIN employees e2
+        ON e.manager_id = e2.id`;
     connection.query(sql , (error, response ) => {
         if (error) throw error;
         console.table(response);
@@ -97,7 +120,6 @@ const viewAllEmployees = () => {
 
 //add department
 const addDepartment = () => {
-    viewAllDepartments();
     inquirer.prompt([
         {
             name: 'newDepartment',
@@ -116,8 +138,10 @@ const addDepartment = () => {
 };
 
 //add role
-const addRole = () => {
-    viewAllRoles();
+const addRole = async () => {
+
+    let [departments] = await connection.promise().query('SELECT name, id value FROM departments');
+
     inquirer.prompt([
         {
             name: 'newRoleTitle',
@@ -131,8 +155,9 @@ const addRole = () => {
         },
         {
             name: 'newRoleDepartment_id',
-            type: 'input',
-            message: 'What is their department id?'  
+            type: 'list',
+            message: 'What is their department?',
+            choices: departments
         },
     ])
     .then((answer) => {
@@ -148,8 +173,12 @@ const addRole = () => {
 
   
   //add new employee
-  const addNewEmployee = () => {
-    viewAllEmployees();
+  const addNewEmployee = async () => {
+
+    let [roles] = await connection.promise().query('SELECT title name, id value FROM roles');
+    let [managers] = await connection.promise().query('SELECT CONCAT(first_name," ",last_name) name, id value FROM employees');
+        managers.push({name:'Null',value:null});
+
     inquirer.prompt([
         {
             name: 'newEmployeeFirstName',
@@ -163,13 +192,15 @@ const addRole = () => {
         },
         {
             name: 'newEmployeeRole_id',
-            type: 'input',
-            message: 'What is their role id?'
+            type: 'list',
+            message: 'What is their role id?',
+            choices: roles
         },
         {
             name: 'newEmployeeManager_id', 
-            type: 'input',
+            type: 'list',
             message: 'What is their managers id?',
+            choices: managers
         }
     ])
     .then((answer) => {
@@ -183,19 +214,27 @@ const addRole = () => {
 };
 
 //update employee role 
-const updateEmployeeRole = () => {
-    viewAllRoles();
+const updateEmployeeRole = async () => {
+    let [employees] = await connection.promise().query('SELECT CONCAT(first_name," ",last_name) name, id value FROM employees');
+    let [roles] = await connection.promise().query('SELECT title name, id value FROM roles');
+
     inquirer.prompt([
         {
-            name: 'updateEmployeeRoleId',
-            type: 'input',
-            message: 'what is the employee id you want to update?',
-
+            name: 'id',
+            type: 'list',
+            message: 'who is the employee you want to update?',
+            choices: employees
         },
+        {
+            name: 'role_id',
+            type: 'list',
+            message: 'What is the new role?',
+            choices: roles
+        }
     ])
-    .then((answer) => {
-        const sql = `UPDATE employees SET role_id = '' WHERE VALUES(?)`;
-        connection.query(sql, [answer.updateEmployeeRoleId], (error, response) => {
+    .then(({id,role_id}) => {
+        const sql = `UPDATE employees SET ? WHERE ?`;
+        connection.query(sql, [id,role_id], (error, response) => {
           if (error) throw error;
           console.table(response);
           viewAllRoles();
