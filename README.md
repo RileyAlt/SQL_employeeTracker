@@ -17,7 +17,7 @@ The project was built to create a responsive command-line  that can manage a com
 
 This solved how to us MySQL and how the databese paths work, it also gives me a greater untstanding as to the power your command line has on your computer. 
 
-What I learn from the project was how to use Node properties to create different Inquireries to Manage a company database 
+What I learn from the project was how to use Node properties to create different Inquireries to Manage a company database
 
 ### Installation
 
