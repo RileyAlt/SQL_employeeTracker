@@ -23,7 +23,6 @@ const userQuestions = () => {
                 'add a role', 
                 'add an employee',
                 'update an employee role',
-                'update an employee manager',
                 'view by department budget',
                 'complete and leave'
             ] 
@@ -56,8 +55,8 @@ const userQuestions = () => {
             if (selection ===  'update an employee manager') {
                 updateEmployeeManager();
             }
-            if (selection ===  'view employee by manager') {
-                updateEmployeeManager();
+            if (selection ===  'view by department budget') {
+                viewDepartmentBudget();
             }
             if (selection === 'complete and leave') {
                 connection.end();
@@ -234,7 +233,7 @@ const updateEmployeeRole = async () => {
     ])
     .then(({id,role_id}) => {
         const sql = `UPDATE employees SET ? WHERE ?`;
-        connection.query(sql, [id,role_id], (error, response) => {
+        connection.query(sql, [answer.roles], (error, response) => {
           if (error) throw error;
           console.table(response);
           viewAllRoles();
@@ -244,62 +243,6 @@ const updateEmployeeRole = async () => {
 };
 
 //Bonus 
-
-//update employee manager
-const updateEmployeeManager = () => {
-    const sql = `SELECT employees.id, employees.first_name, employees.last_name, employees.roles_id employees.manager.manager_id FROM employees`;
-    connection.query(sql, (error, response) => {
-        const employeeNameQuestion = [];
-        response.forEach((employees) => {employeeNamQuestion.push(`${employees.first_name} ${employees.last_name}`)})
-    });
-
-    inquirer.prompt([
-        {
-            name: 'selectedEmployee',
-            type: 'list',
-            message: 'What Employee is getting a new manager?',
-            choices: employeeNameQuestion
-        },
-        {
-            name: 'newManager',
-            type: 'list',
-            message: 'What is the new role?',
-            choices: employeeNameQuestion
-        }
-    ])
-    .then((answer) => {
-        let employeesId, managerId;
-        response.forEach((employees) =>{
-            if (
-                answer.seletedEmployee === `${employees.first_name} ${employees.last_name}`
-            ) {
-                employeeid = employees.id;
-            }
-            if (
-                answer.newManager === `${employees.first_name} ${employees.last_name}`
-            ){
-                managerId = employees.id;
-            }
-        });
-
-        const sql = `UPDATE employees SET employees.manager_id = ? WHERE employees.id = ?`;
-        connection.query(sql, [employeeId, managerId], (error) => {
-        if (error) throw error;
-        console.table(response);
-        userQuestions();
-        });
-    });
-};
-
-//view employee by manager 
-
-//view employee by department
-
-//delete departments
-
-//delete roles 
-
-//delete employees
 
 //view by department budget 
 
