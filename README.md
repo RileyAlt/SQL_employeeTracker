@@ -29,9 +29,7 @@ Once everthing is fully downloaded you will run `node server.js` to start the te
 
 The program runs as follows:
 
-![alt text](./src/start-page.png)
-
-![alt text](./src/running-app.png)
+![Commandine Terminal showing applicatino running](./assets/WorkingApp.png)
 
 ### Licensing
 
