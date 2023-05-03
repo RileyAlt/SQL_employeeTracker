@@ -3,11 +3,7 @@
 
 Riley Altenburg
 
-If you'd like to connect me, please email RileyAltenburg@gmail.com. I'd love to answer any questions and improve where i can. 
-
-### GitHub Information
-
-Find my Repository information here at: https://github.com/RileyAlt/SQL_employeeTracker
+If you'd like to connect me, please email RileyAltenburg@gmail.com. I'd love to answer any questions and improve where I can. 
 
 ### Description
 
@@ -22,6 +18,11 @@ What I learn from the project was how to use Node properties to create different
 ### Installation
 
 You must Run `npm i` to install all package dependencies, 
+
+In a seperate Command Line open run your Mysql login using `mysql -u root -p` followed by your password.
+
+SOURCE the schema.sql and SOURCE the seeds.sql to get your data set.
+
 Once everthing is fully downloaded you will run `node server.js` to start the terminal questions. 
 
 ### Usage
@@ -35,9 +36,3 @@ The program runs as follows:
 ### Licensing
 
 MIT
-
-### Contributors
-
-None
-
-### Testing

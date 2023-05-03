@@ -232,11 +232,11 @@ const updateEmployeeRole = async () => {
         }
     ])
     .then(({id,role_id}) => {
-        const sql = `UPDATE employees SET ? WHERE ?`;
-        connection.query(sql, [answer.roles], (error, response) => {
+        const sql = `UPDATE employees SET roles_id = ? WHERE id = ?`;
+        connection.query(sql, [role_id,id], (error, response) => {
           if (error) throw error;
           console.table(response);
-          viewAllRoles();
+          viewAllEmployees();
         });
     });
    
